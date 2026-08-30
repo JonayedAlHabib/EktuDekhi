@@ -4,7 +4,7 @@ import {User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import {ApiResponse} from "../utils/apiResponse.js"
 
-const generateAccessTokenAndRefreshToken (async(userID)=>{
+const generateAccessTokenAndRefreshToken = async (userID) => {
     try {
         const user = await User.findOne(userID)
         const accessToken = generateAccessToken()
@@ -17,7 +17,7 @@ const generateAccessTokenAndRefreshToken (async(userID)=>{
     } catch (error) {
         throw new ApiError(500, "Something went wrong while generating access and refresh token")
     }
-})
+}
 
 const registerUser = asyncHandler (async (req, res) => {
     const {fullName, email, userName, password} = req.body
@@ -106,7 +106,7 @@ const loginUser = asyncHandler (async (req, res) => {
         new ApiResponse(
             200,
             {
-                user = loggedInUser, accessToken, refreshToken
+                user : loggedInUser, accessToken, refreshToken
             },
             "User loggedIn successfully"
         )
