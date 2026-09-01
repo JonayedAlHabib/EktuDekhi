@@ -247,7 +247,7 @@ const updateUserAvatar = asyncHandler (async (req, res) =>{
 
     const avatar = uploadOnCloudinary(avatarLocal)
 
-    if(!avatar)
+    if(!avatar.url)
         throw new ApiError(400, "Error while file uploading")
 
     User.findByIdAndUpdate(
@@ -273,7 +273,7 @@ const updateUserCoverImage = asyncHandler (async (req, res) =>{
 
     const coverImage = uploadOnCloudinary(coverImageLocal)
 
-    if(!coverImage)
+    if(!coverImage.url)
         throw new ApiError(400, "Error while file uploading")
 
     User.findByIdAndUpdate(
