@@ -19,7 +19,7 @@ router.route("/register").post(
     ]),
     registerUser)
 
-router.route("/login", loginUser)   
+router.route("/login").post(loginUser)  
 
 // Secured routes 
 router.route("/logout",verifyJWT, logoutUser)
