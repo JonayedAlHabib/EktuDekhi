@@ -6,15 +6,16 @@ import {ApiResponse} from "../utils/apiResponse.js"
 
 const generateAccessTokenAndRefreshToken = async (userID) => {
     try {
-        const user = await User.findOne(userID)
-        const accessToken = generateAccessToken()
-        const refreshToken = generateRefreshToken()
+        const user = await User.findById(userID)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
 
         user.refreshToken = refreshToken
         await user.save({validateBeforeSave : false})
 
         return {accessToken, refreshToken}
     } catch (error) {
+        console.error("Token generation error:", error)
         throw new ApiError(500, "Something went wrong while generating access and refresh token")
     }
 }
@@ -91,7 +92,7 @@ const loginUser = asyncHandler (async (req, res) => {
 
 
     const {accessToken, refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
-    const loggedInUser = await user.findById(user._id).select("-password -refreshToken")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const option = {
         httpOnly: true,
