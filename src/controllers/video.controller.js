@@ -164,9 +164,36 @@ const updateVideo = asyncHandler (async (req, res) =>{
     
 })
 
+const deleteVideo = asyncHandler (async (req, res) =>{
+    const {videoId} = req.params
+
+    if(!(mongoose.Types.ObjectId.isValid(videoId)))
+        throw new ApiError(400, "Invalid video ID")
+
+    const deletedVideo = await Video.findOneAndDelete({
+        _id: videoId,
+        owner: req.user?._id
+    })
+
+    if(!deletedVideo) {
+        const videoExists = await Video.exists({_id: videoId})
+        if(!videoExists)
+            throw new ApiError(404, "Video not found")
+
+        throw new ApiError(403, "You are not authorized to delete this video")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, null, "Video deleted successfully")
+    )
+})
+
 export {
     getAllVideos,
     uploadVideo,
     getVideoById,
-    updateVideo
+    updateVideo,
+    deleteVideo
 }
