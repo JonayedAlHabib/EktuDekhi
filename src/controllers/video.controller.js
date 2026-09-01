@@ -85,7 +85,41 @@ const uploadVideo = asyncHandler (async (req, res) =>{
 
 })
 
+const getVideoById = asyncHandler (async (req, res) =>{
+    const {videoId} = req.params
+
+    if(!(mongoose.Types.ObjectId.isValid(videoId)))
+        throw new ApiError(400, "Invalid video ID")
+
+    const video = Video.findById(videoId)
+        .populate('owner', 'userName avatar fullName')
+
+    if(!video)
+        throw new ApiError(400, "Video not found")
+
+    if(!(video.isPublished))
+        throw new ApiError(400, "Video not available")
+
+    await Video.findByIdAndUpdate(
+        videoId,
+        { $inc: {views: 1} },
+        {returnDocument: 'after'}
+    )
+
+    const updatedVideo = await Video.findById(videoId)
+        .populate('owner', 'userName avatar fullname')
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, updatedVideo, "Video fetched successfully")
+    )
+
+
+})
+
 export {
     getAllVideos,
-    uploadVideo
+    uploadVideo,
+    getVideoById
 }
