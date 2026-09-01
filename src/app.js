@@ -17,11 +17,13 @@ app.use(cookieParser())
 
 // router import 
 import userRouter from "./routes/user.routes.js"
-
+import healthCheckRouter from "./routes/healthcheck.routes.js"
 
 
 // router declaration 
+app.use("/api/v1/healthcheck", healthCheckRouter)
 app.use("/api/v1/users", userRouter)
 
+// http://localhost:4000/api/v1/users
 
 export { app }
