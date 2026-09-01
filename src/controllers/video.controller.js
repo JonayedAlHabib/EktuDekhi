@@ -91,14 +91,14 @@ const getVideoById = asyncHandler (async (req, res) =>{
     if(!(mongoose.Types.ObjectId.isValid(videoId)))
         throw new ApiError(400, "Invalid video ID")
 
-    const video = Video.findById(videoId)
+    const video = await Video.findById(videoId)
         .populate('owner', 'userName avatar fullName')
 
     if(!video)
-        throw new ApiError(400, "Video not found")
+        throw new ApiError(404, "Video not found")
 
     if(!(video.isPublished))
-        throw new ApiError(400, "Video not available")
+        throw new ApiError(404, "Video not available")
 
     await Video.findByIdAndUpdate(
         videoId,
@@ -107,7 +107,7 @@ const getVideoById = asyncHandler (async (req, res) =>{
     )
 
     const updatedVideo = await Video.findById(videoId)
-        .populate('owner', 'userName avatar fullname')
+        .populate('owner', 'userName avatar fullName')
 
     return res
     .status(200)
@@ -118,8 +118,55 @@ const getVideoById = asyncHandler (async (req, res) =>{
 
 })
 
+const updateVideo = asyncHandler (async (req, res) =>{
+    const {videoId} = req.params
+    const {title, description} = req.body
+    const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path
+
+    if(!(mongoose.Types.ObjectId.isValid(videoId)))
+        throw new ApiError(400, "Invalid video ID")
+
+    if(!title && !description && !thumbnailLocalPath)
+        throw new ApiError(400, "Provide at least one field to update")
+
+    const video = await Video.findById(videoId)
+        .populate('owner', 'userName avatar fullName')
+
+    if(!video)
+        throw new ApiError(404, "Video not found")
+
+    if(video.owner.toString() !== req.user?._id.toString())
+        throw new ApiError(403, "You are not authorized to update this video")
+
+    const updateFields = {}
+    if(title) updateFields.title = title
+    if(description) updateFields.description = description
+
+    if(thumbnailLocalPath) {
+        const thumbnailFile = await uploadOnCloudinary(thumbnailLocalPath)
+        if(!thumbnailFile?.url)
+            throw new ApiError(400, "Error while uploading thumbnail")
+        updateFields.thumbnail = thumbnailFile.url
+    }
+
+    const updatedVideo = await Video.findByIdAndUpdate(
+        videoId,
+        { $set: updateFields },
+        { returnDocument: 'after' }
+    )
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, updatedVideo, "Video updated successfully")
+    )
+
+    
+})
+
 export {
     getAllVideos,
     uploadVideo,
-    getVideoById
+    getVideoById,
+    updateVideo
 }
