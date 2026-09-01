@@ -42,6 +42,11 @@ const getAllVideos = asyncHandler (async (req, res) =>{
    )
 })
 
+const uploadVideo = asyncHandler (async (req, res) =>{
+
+})
+
 export {
-    getAllVideos
+    getAllVideos,
+    uploadVideo
 }
