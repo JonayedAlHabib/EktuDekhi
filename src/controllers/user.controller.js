@@ -239,6 +239,58 @@ const updateAccountDetails = asyncHandler (async (req, res) =>{
     .json(new ApiResponse(200, user, "Account details updated Successfully"))
 })
 
+const updateUserAvatar = asyncHandler (async (req, res) =>{
+    const avatarLocal = req.file?.path
+
+    if(!avatarLocal)
+        throw new ApiError(400, "Avatar file missing")
+
+    const avatar = uploadOnCloudinary(avatarLocal)
+
+    if(!avatar)
+        throw new ApiError(400, "Error while file uploading")
+
+    User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                avatar: avatar.url
+            }
+        },
+        {new: true}
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Avatar image updated successfully"))
+})
+
+const updateUserCoverImage = asyncHandler (async (req, res) =>{
+    const coverImageLocal = req.file?.path
+
+    if(!coverImageLocal)
+        throw new ApiError(400, "Cover Image field missing")
+
+    const coverImage = uploadOnCloudinary(coverImageLocal)
+
+    if(!coverImage)
+        throw new ApiError(400, "Error while file uploading")
+
+    User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {new: true}
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Cover Image updated successfully"))
+})
+
 export {
     registerUser,
     loginUser,
@@ -246,5 +298,7 @@ export {
     refreshAccessToken,
     changePassword,
     getCurrentUser,
-    updateAccountDetails
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage
 }
