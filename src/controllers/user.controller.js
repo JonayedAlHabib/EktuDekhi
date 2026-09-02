@@ -232,7 +232,7 @@ const updateAccountDetails = asyncHandler (async (req, res) =>{
             }
         },
         {new : true}
-    ).select(-password)
+    ).select("-password")
 
     return res
     .status(200)
