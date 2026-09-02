@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import {Video} from "../models/video.model.js"
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/apiError";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
@@ -170,24 +170,57 @@ const deleteVideo = asyncHandler (async (req, res) =>{
     if(!(mongoose.Types.ObjectId.isValid(videoId)))
         throw new ApiError(400, "Invalid video ID")
 
-    const deletedVideo = await Video.findOneAndDelete({
-        _id: videoId,
-        owner: req.user?._id
-    })
+    const video = await Video.findById(videoId)
+        .populate('owner', 'userName avatar fullName')
 
-    if(!deletedVideo) {
-        const videoExists = await Video.exists({_id: videoId})
-        if(!videoExists)
-            throw new ApiError(404, "Video not found")
+    if(!video)
+        throw new ApiError(404, "Video not found")
 
+    if(video.owner.toString() !== req.user?._id.toString())
         throw new ApiError(403, "You are not authorized to delete this video")
-    }
+
+    const deletedVideo = await Video.findByIdAndDelete(videoId)
+
+    if(!deletedVideo)
+        throw new ApiError(500, "Error while deleting video")
 
     return res
     .status(200)
     .json(
-        new ApiResponse(200, null, "Video deleted successfully")
+        new ApiResponse(200, {}, "Video deleted successfully")
     )
+
+})
+
+const togglePublishStatus = asyncHandler (async (req, res) =>{
+    const {videoId} = req.params
+
+    if(!(mongoose.Types.ObjectId.isValid(videoId)))
+        throw new ApiError(400, "Invalid video ID")
+
+    const video = await Video.findByID(videoId)
+        .populate('owner', 'userName avatar fullaName')
+
+    if(!video)
+        throw new ApiError(404, "Video not found")
+
+    if(video.owner.toString() !== req.user?._id.toString())
+        throw new ApiError(403, "You are not authorized to delete this video")
+
+    const user = Video.findByIdAndUpdate(
+        videoId,
+        {
+            $set: {isPublished: !video.isPublished}
+        },
+        {returnDocument : 'after'}
+    )
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, user, "Video publish status toggled successfully")
+    )
+
 })
 
 export {
@@ -195,5 +228,6 @@ export {
     uploadVideo,
     getVideoById,
     updateVideo,
-    deleteVideo
+    deleteVideo,
+    togglePublishStatus
 }
