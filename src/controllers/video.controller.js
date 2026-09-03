@@ -199,7 +199,7 @@ const togglePublishStatus = asyncHandler (async (req, res) =>{
         throw new ApiError(400, "Invalid video ID")
 
     const video = await Video.findByID(videoId)
-        .populate('owner', 'userName avatar fullaName')
+        .populate('owner', 'userName avatar fullName')
 
     if(!video)
         throw new ApiError(404, "Video not found")

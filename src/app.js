@@ -20,6 +20,7 @@ import userRouter from "./routes/user.routes.js"
 import healthCheckRouter from "./routes/healthcheck.routes.js"
 import videoRouter from "./routes/video.routes.js"
 import commentRouter from "./routes/comment.routes.js"
+import likeRouter from "./routes/like.routes.js"
 
 
 // router declaration
@@ -27,6 +28,7 @@ app.use("/api/v1/healthcheck", healthCheckRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/videos",videoRouter)
 app.use("/api/v1/comments", commentRouter)
+app.use("/api/v1/likes", likeRouter)
 
 // http://localhost:4000/api/v1/users
 
