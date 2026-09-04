@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const playlistSchema = new mongoose.Schema({
     name: {
@@ -20,5 +21,7 @@ const playlistSchema = new mongoose.Schema({
         ref: "User"
     }
 }, {timestamps: true})
+
+playlistSchema.plugin(mongoosePaginate)
 
 export const Playlist = mongoose.model("Playlist", playlistSchema)
