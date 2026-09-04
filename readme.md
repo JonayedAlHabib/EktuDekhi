@@ -10,8 +10,9 @@ A video hosting website backend, similar to YouTube. Built with Node.js, Express
 - **Comments** — add, update, delete, paginated fetch per video
 - **Likes** — toggle like on videos, comments, and tweets; fetch all liked videos
 - **Subscriptions** — subscribe/unsubscribe to channels, fetch a channel's subscribers, fetch channels a user is subscribed to
+- **Tweets** — create, update, delete tweets, fetch a user's tweets (paginated)
 
-> Tweet and playlist data models exist in the schema but do not yet have controllers/routes wired up.
+> A playlist data model exists in the schema but does not yet have controllers/routes wired up.
 
 ## Tech Stack
 
@@ -128,6 +129,14 @@ All routes are prefixed with `/api/v1`. Routes marked 🔒 require a valid JWT (
 | POST | `/c/:channelId` | Subscribe/unsubscribe to a channel |
 | GET | `/c/:channelId` | Get a channel's subscribers |
 | GET | `/u/:subscriberId` | Get channels a user is subscribed to |
+
+### Tweets — `/tweets` 🔒 (all routes)
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/` | Create a tweet |
+| GET | `/user/:userId` | Get paginated tweets for a user |
+| PATCH | `/:tweetId` | Update a tweet |
+| DELETE | `/:tweetId` | Delete a tweet |
 
 ## Scripts
 
