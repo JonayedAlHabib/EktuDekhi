@@ -1,4 +1,4 @@
-# MeTube
+# EktuDekhi
 
 A video hosting website backend, similar to YouTube. Built with Node.js, Express, and MongoDB, it handles user auth, video uploads, engagement (likes/comments), and channel subscriptions.
 
