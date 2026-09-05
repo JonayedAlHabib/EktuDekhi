@@ -12,6 +12,7 @@ A video hosting website backend, similar to YouTube. Built with Node.js, Express
 - **Subscriptions** — subscribe/unsubscribe to channels, fetch a channel's subscribers, fetch channels a user is subscribed to
 - **Tweets** — create, update, delete tweets, fetch a user's tweets (paginated)
 - **Playlists** — create playlists, fetch a user's playlists (paginated), fetch a playlist with its videos, add/remove videos, delete a playlist
+- **Dashboard** — channel stats (total videos, views, subscribers, likes) and a paginated list of the logged-in creator's own videos (including unpublished)
 
 ## Tech Stack
 
@@ -146,6 +147,12 @@ All routes are prefixed with `/api/v1`. Routes marked 🔒 require a valid JWT (
 | DELETE | `/:playlistId` | Delete a playlist |
 | PATCH | `/add/:videoId/:playlistId` | Add a video to a playlist |
 | PATCH | `/remove/:videoId/:playlistId` | Remove a video from a playlist |
+
+### Dashboard — `/dashboard` 🔒 (all routes)
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/stats` | Get the logged-in channel's stats (videos, views, subscribers, likes) |
+| GET | `/videos` | Get paginated list of the logged-in channel's own videos |
 
 ## Scripts
 
