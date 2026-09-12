@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const formatDuration = (seconds) => {
     if (seconds === undefined || seconds === null) return "--:--"
     const total = Math.floor(seconds)
@@ -8,7 +10,11 @@ const formatDuration = (seconds) => {
 
 const VideoCard = ({ video }) => {
     return (
-        <div className="bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden">
+        <Link
+            to={`/watch/${video._id}`}
+            state={{ video }}
+            className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden"
+        >
             <div className="relative aspect-video bg-gray-200">
                 <img
                     src={video.thumbnail}
@@ -33,7 +39,7 @@ const VideoCard = ({ video }) => {
                     <p className="text-xs text-gray-500">{video.views ?? 0} views</p>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 
