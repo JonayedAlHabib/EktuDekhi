@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
 import { registerUser, loginUser } from "../api/userService"
 import { useAuth } from "../context/AuthContext.jsx"
 
 const Register = () => {
     const { login } = useAuth()
+    const navigate = useNavigate()
     const [form, setForm] = useState({
         fullName: "",
         email: "",
@@ -46,6 +48,7 @@ const Register = () => {
                 password: form.password
             })
             login({ user: loginRes.data.user, accessToken: loginRes.data.accessToken })
+            navigate("/", { replace: true })
         } catch (err) {
             setError(err.response?.data?.message || "Registration failed")
         } finally {
@@ -54,11 +57,12 @@ const Register = () => {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-sm bg-white p-8 rounded-lg shadow space-y-4"
-        >
-            <h1 className="text-2xl font-semibold text-center">Register</h1>
+        <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-gray-50 py-8">
+            <form
+                onSubmit={handleSubmit}
+                className="w-full max-w-sm bg-white p-8 rounded-lg shadow space-y-4"
+            >
+                <h1 className="text-2xl font-semibold text-center">Register</h1>
 
                 {error && (
                     <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
@@ -150,7 +154,15 @@ const Register = () => {
                 >
                     {loading ? "Registering..." : "Register"}
                 </button>
-        </form>
+            </form>
+
+            <p className="text-center text-sm">
+                Already have an account?{" "}
+                <Link to="/login" className="text-blue-600 hover:underline">
+                    Login
+                </Link>
+            </p>
+        </div>
     )
 }
 
