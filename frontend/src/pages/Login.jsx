@@ -1,9 +1,12 @@
 import { useState } from "react"
+import { useNavigate, useLocation, Link } from "react-router-dom"
 import { loginUser } from "../api/userService"
 import { useAuth } from "../context/AuthContext.jsx"
 
 const Login = () => {
     const { login } = useAuth()
+    const navigate = useNavigate()
+    const location = useLocation()
     const [form, setForm] = useState({ userName: "", email: "", password: "" })
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -19,6 +22,7 @@ const Login = () => {
         try {
             const res = await loginUser(form)
             login({ user: res.data.user, accessToken: res.data.accessToken })
+            navigate(location.state?.from?.pathname || "/", { replace: true })
         } catch (err) {
             setError(err.response?.data?.message || "Login failed")
         } finally {
@@ -27,11 +31,12 @@ const Login = () => {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-sm bg-white p-8 rounded-lg shadow space-y-4"
-        >
-            <h1 className="text-2xl font-semibold text-center">Login</h1>
+        <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-gray-50 py-8">
+            <form
+                onSubmit={handleSubmit}
+                className="w-full max-w-sm bg-white p-8 rounded-lg shadow space-y-4"
+            >
+                <h1 className="text-2xl font-semibold text-center">Login</h1>
 
                 {error && (
                     <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
@@ -74,6 +79,7 @@ const Login = () => {
                         className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
+
                 <button
                     type="submit"
                     disabled={loading}
@@ -81,7 +87,15 @@ const Login = () => {
                 >
                     {loading ? "Logging in..." : "Login"}
                 </button>
-        </form>
+            </form>
+
+            <p className="text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <Link to="/register" className="text-blue-600 hover:underline">
+                    Register
+                </Link>
+            </p>
+        </div>
     )
 }
 
