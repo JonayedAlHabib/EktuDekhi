@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
-import { useAuth } from "../context/AuthContext.jsx"
 import { getAllVideos } from "../api/videoService"
 import VideoCard from "../components/VideoCard.jsx"
+import Navbar from "../components/Navbar.jsx"
 
 const VIDEOS_PER_PAGE = 12
 
 const Home = () => {
-    const { user, logout } = useAuth()
     const [videos, setVideos] = useState([])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
@@ -42,17 +41,7 @@ const Home = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <header className="flex items-center justify-between px-6 py-4 bg-white shadow-sm">
-                <p className="text-lg font-medium">
-                    Welcome, {user?.fullName || user?.userName}
-                </p>
-                <button
-                    onClick={logout}
-                    className="bg-gray-800 text-white rounded px-4 py-2 hover:bg-gray-900"
-                >
-                    Logout
-                </button>
-            </header>
+            <Navbar />
 
             <main className="max-w-6xl mx-auto px-4 py-6">
                 {error && (
