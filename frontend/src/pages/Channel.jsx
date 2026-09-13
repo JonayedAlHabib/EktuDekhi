@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { getUserChannelProfile } from "../api/userService"
 import { toggleSubscription } from "../api/subscriptionService"
+import { getAllVideos } from "../api/videoService"
 import { useAuth } from "../context/AuthContext.jsx"
 import Navbar from "../components/Navbar.jsx"
+import VideoCard from "../components/VideoCard.jsx"
 
 const Channel = () => {
     const { username } = useParams()
@@ -13,6 +15,10 @@ const Channel = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [subLoading, setSubLoading] = useState(false)
+
+    const [videos, setVideos] = useState([])
+    const [videosLoading, setVideosLoading] = useState(true)
+    const [videosError, setVideosError] = useState("")
 
     useEffect(() => {
         let cancelled = false
@@ -37,6 +43,39 @@ const Channel = () => {
             cancelled = true
         }
     }, [username])
+
+    // Once we know the channel's user id, fetch the videos they've uploaded,
+    // newest upload first.
+    useEffect(() => {
+        if (!channel?._id) return
+        let cancelled = false
+
+        const fetchVideos = async () => {
+            setVideosLoading(true)
+            setVideosError("")
+            try {
+                const res = await getAllVideos({
+                    query: ".*",
+                    userId: channel._id,
+                    sortBy: "createdAt",
+                    sortType: "desc",
+                    limit: 24
+                })
+                if (cancelled) return
+                setVideos(res.data.docs)
+            } catch (err) {
+                if (cancelled) return
+                setVideosError(err.response?.data?.message || "Failed to load videos")
+            } finally {
+                if (!cancelled) setVideosLoading(false)
+            }
+        }
+
+        fetchVideos()
+        return () => {
+            cancelled = true
+        }
+    }, [channel?._id])
 
     const handleToggleSubscribe = async () => {
         if (!channel) return
@@ -66,7 +105,7 @@ const Channel = () => {
             ) : error || !channel ? (
                 <p className="text-center text-red-600 py-12">{error || "Channel not found"}</p>
             ) : (
-                <div className="max-w-3xl mx-auto">
+                <div className="max-w-5xl mx-auto">
                     <div className="h-40 bg-gray-300">
                         {channel.coverImage && (
                             <img
@@ -99,13 +138,37 @@ const Channel = () => {
                                     className={`px-5 py-2 rounded font-medium text-sm disabled:opacity-50 ${
                                         channel.isSubscribed
                                             ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                            : "bg-blue-600 text-white hover:bg-blue-700"
+                                            : "bg-red-600 text-white hover:bg-red-700"
                                     }`}
                                 >
                                     {channel.isSubscribed ? "Subscribed" : "Subscribe"}
                                 </button>
                             )}
                         </div>
+                    </div>
+
+                    <div className="px-4 sm:px-6 pb-8">
+                        <h2 className="text-lg font-semibold mb-3">Videos</h2>
+
+                        {videosError && (
+                            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2 mb-3">
+                                {videosError}
+                            </p>
+                        )}
+
+                        {videosLoading ? (
+                            <p className="text-center text-gray-500 py-8">Loading videos...</p>
+                        ) : videos.length === 0 ? (
+                            <p className="text-center text-gray-500 py-8">
+                                No videos uploaded yet
+                            </p>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {videos.map((video) => (
+                                    <VideoCard key={video._id} video={video} />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
