@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useLocation, Link } from "react-router-dom"
-import { getAllVideos } from "../api/videoService"
+import { getVideoById } from "../api/videoService"
 import { toggleVideoLike, getAllLikedVideos } from "../api/likeService"
 import CommentSection from "../components/CommentSection.jsx"
 
@@ -15,10 +15,8 @@ const Watch = () => {
     const [liked, setLiked] = useState(false)
     const [likeLoading, setLikeLoading] = useState(false)
 
-    // Fallback for direct URL access / refresh, when no video was passed via router state.
-    // NOTE: GET /videos/:videoId on the backend is currently wired to the list controller
-    // (getAllVideos) rather than a single-video lookup, so there is no real "fetch by id"
-    // endpoint yet. As a workaround, list videos and find the match client-side.
+    // Skip the fetch when a VideoCard already handed us the video via router state;
+    // otherwise (direct URL visit / refresh) fetch it by id.
     useEffect(() => {
         if (video) return
         let cancelled = false
@@ -27,14 +25,9 @@ const Watch = () => {
             setLoadingVideo(true)
             setVideoError("")
             try {
-                const res = await getAllVideos({ query: ".*", limit: 100 })
+                const res = await getVideoById(videoId)
                 if (cancelled) return
-                const found = res.data.docs.find((v) => v._id === videoId)
-                if (!found) {
-                    setVideoError("Video not found")
-                } else {
-                    setVideo(found)
-                }
+                setVideo(res.data)
             } catch (err) {
                 if (cancelled) return
                 setVideoError(err.response?.data?.message || "Failed to load video")
