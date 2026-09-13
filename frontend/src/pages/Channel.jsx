@@ -97,16 +97,16 @@ const Channel = () => {
     const isOwnChannel = currentUser?.userName === username
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-linear-to-br from-navy via-plum to-terracotta">
             <Navbar />
 
             {loading ? (
-                <p className="text-center text-gray-500 py-12">Loading channel...</p>
+                <p className="text-center text-cream/70 py-12">Loading channel...</p>
             ) : error || !channel ? (
-                <p className="text-center text-red-600 py-12">{error || "Channel not found"}</p>
+                <p className="text-center text-red-200 py-12">{error || "Channel not found"}</p>
             ) : (
                 <div className="max-w-5xl mx-auto">
-                    <div className="h-40 bg-gray-300">
+                    <div className="h-40 bg-linear-to-r from-navy via-plum to-terracotta">
                         {channel.coverImage && (
                             <img
                                 src={channel.coverImage}
@@ -119,13 +119,13 @@ const Channel = () => {
                         <img
                             src={channel.avatar}
                             alt={channel.userName}
-                            className="w-24 h-24 rounded-full object-cover border-4 border-white bg-white"
+                            className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg bg-white"
                         />
                         <div className="flex-1 flex items-center justify-between flex-wrap gap-3">
                             <div>
-                                <h1 className="text-xl font-semibold">{channel.fullName}</h1>
-                                <p className="text-sm text-gray-500">@{channel.userName}</p>
-                                <p className="text-sm text-gray-500">
+                                <h1 className="text-xl font-bold text-cream">{channel.fullName}</h1>
+                                <p className="text-sm text-cream/80">@{channel.userName}</p>
+                                <p className="text-sm text-cream/80">
                                     {channel.subscribersCount} subscribers ·{" "}
                                     {channel.channelsSubscribedToCount} subscribed
                                 </p>
@@ -135,10 +135,10 @@ const Channel = () => {
                                 <button
                                     onClick={handleToggleSubscribe}
                                     disabled={subLoading}
-                                    className={`px-5 py-2 rounded font-medium text-sm disabled:opacity-50 ${
+                                    className={`px-5 py-2 rounded-lg font-medium text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 ${
                                         channel.isSubscribed
-                                            ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                            : "bg-red-600 text-white hover:bg-red-700"
+                                            ? "bg-cream/20 text-cream hover:bg-cream/30"
+                                            : "bg-linear-to-r from-terracotta to-plum text-white"
                                     }`}
                                 >
                                     {channel.isSubscribed ? "Subscribed" : "Subscribe"}
@@ -148,7 +148,7 @@ const Channel = () => {
                     </div>
 
                     <div className="px-4 sm:px-6 pb-8">
-                        <h2 className="text-lg font-semibold mb-3">Videos</h2>
+                        <h2 className="text-lg font-bold text-cream mb-3">Videos</h2>
 
                         {videosError && (
                             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2 mb-3">
@@ -157,9 +157,9 @@ const Channel = () => {
                         )}
 
                         {videosLoading ? (
-                            <p className="text-center text-gray-500 py-8">Loading videos...</p>
+                            <p className="text-center text-cream/70 py-8">Loading videos...</p>
                         ) : videos.length === 0 ? (
-                            <p className="text-center text-gray-500 py-8">
+                            <p className="text-center text-cream/70 py-8">
                                 No videos uploaded yet
                             </p>
                         ) : (

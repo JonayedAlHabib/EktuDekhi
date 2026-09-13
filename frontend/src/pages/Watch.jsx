@@ -93,7 +93,7 @@ const Watch = () => {
         return (
             <div className="text-center py-12">
                 <p className="text-red-600 mb-3">{error || "Video not found"}</p>
-                <Link to="/" className="text-blue-600 hover:underline">
+                <Link to="/" className="text-slate hover:underline">
                     Back to home
                 </Link>
             </div>
@@ -104,7 +104,7 @@ const Watch = () => {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-6">
-            <Link to="/" className="text-sm text-blue-600 hover:underline">
+            <Link to="/" className="text-sm text-slate hover:underline">
                 &larr; Back
             </Link>
 
@@ -112,10 +112,10 @@ const Watch = () => {
                 controls
                 src={video.videoFile}
                 poster={video.thumbnail}
-                className="w-full rounded-lg bg-black aspect-video mt-3"
+                className="w-full rounded-xl bg-black aspect-video mt-3 shadow-xl"
             />
 
-            <h1 className="text-xl font-semibold mt-4">{video.title}</h1>
+            <h1 className="text-xl font-bold text-navy mt-4">{video.title}</h1>
 
             <div className="flex items-center justify-between mt-2 flex-wrap gap-3">
                 <Link
@@ -126,14 +126,14 @@ const Watch = () => {
                         <img
                             src={video.owner.avatar}
                             alt={video.owner.userName}
-                            className="w-10 h-10 rounded-full object-cover"
+                            className="w-10 h-10 rounded-full object-cover ring-2 ring-cream"
                         />
                     )}
                     <div>
-                        <p className="font-medium">
+                        <p className="font-medium text-navy">
                             {video.owner?.fullName || video.owner?.userName}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-olive">
                             {video.views} views
                             {subInfo && ` · ${subInfo.subscribersCount} subscribers`}
                             {` · ${video.likesCount} likes`}
@@ -146,10 +146,10 @@ const Watch = () => {
                         <button
                             onClick={handleToggleSubscribe}
                             disabled={subLoading}
-                            className={`px-4 py-2 rounded font-medium text-sm disabled:opacity-50 ${
+                            className={`px-4 py-2 rounded-lg font-medium text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 ${
                                 subInfo?.isSubscribed
-                                    ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                    : "bg-red-600 text-white hover:bg-red-700"
+                                    ? "bg-olive/20 text-navy hover:bg-olive/30"
+                                    : "bg-linear-to-r from-terracotta to-plum text-white"
                             }`}
                         >
                             {subInfo?.isSubscribed ? "Subscribed" : "Subscribe"}
@@ -159,10 +159,10 @@ const Watch = () => {
                     <button
                         onClick={handleToggleLike}
                         disabled={likeLoading}
-                        className={`px-4 py-2 rounded font-medium text-sm disabled:opacity-50 ${
+                        className={`px-4 py-2 rounded-lg font-medium text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 ${
                             liked
-                                ? "bg-blue-600 text-white hover:bg-blue-700"
-                                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                ? "bg-linear-to-r from-terracotta to-plum text-white"
+                                : "bg-olive/20 text-navy hover:bg-olive/30"
                         }`}
                     >
                         {liked ? "Liked" : "Like"}

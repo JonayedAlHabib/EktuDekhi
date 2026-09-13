@@ -55,7 +55,7 @@ const CommentSection = ({ videoId }) => {
 
     return (
         <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-3">Comments</h2>
+            <h2 className="text-lg font-bold text-navy mb-3">Comments</h2>
 
             <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
                 <input
@@ -63,12 +63,12 @@ const CommentSection = ({ videoId }) => {
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Add a comment..."
-                    className="flex-1 border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 border border-olive/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                 />
                 <button
                     type="submit"
                     disabled={posting || !newComment.trim()}
-                    className="bg-blue-600 text-white text-sm rounded px-4 py-2 font-medium hover:bg-blue-700 disabled:opacity-50"
+                    className="bg-linear-to-r from-terracotta to-plum text-white text-sm rounded-lg px-4 py-2 font-medium shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                     {posting ? "Posting..." : "Post"}
                 </button>
@@ -87,11 +87,11 @@ const CommentSection = ({ videoId }) => {
                             <img
                                 src={comment.owner.avatar}
                                 alt={comment.owner.userName}
-                                className="w-8 h-8 rounded-full object-cover shrink-0"
+                                className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-cream"
                             />
                         )}
                         <div>
-                            <p className="text-sm font-medium">{comment.owner?.userName}</p>
+                            <p className="text-sm font-medium text-navy">{comment.owner?.userName}</p>
                             <p className="text-sm text-gray-700">{comment.content}</p>
                         </div>
                     </li>
@@ -111,7 +111,7 @@ const CommentSection = ({ videoId }) => {
             {!loading && hasNextPage && (
                 <button
                     onClick={() => setPage((p) => p + 1)}
-                    className="w-full mt-3 text-sm text-blue-600 hover:underline"
+                    className="w-full mt-3 text-sm text-slate hover:underline"
                 >
                     Load more comments
                 </button>

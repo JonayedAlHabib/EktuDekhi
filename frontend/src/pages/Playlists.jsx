@@ -107,33 +107,33 @@ const Playlists = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-linear-to-br from-navy via-plum to-terracotta">
             <Navbar />
             <div className="max-w-3xl mx-auto px-4 py-6">
-                <h1 className="text-xl font-semibold mb-4">My Playlists</h1>
+                <h1 className="text-xl font-bold text-cream mb-4">My Playlists</h1>
 
                 <form
                     onSubmit={handleCreate}
-                    className="bg-white p-4 rounded-lg shadow flex gap-2 flex-wrap mb-6"
+                    className="bg-white p-4 rounded-xl shadow-md flex gap-2 flex-wrap mb-6"
                 >
                     <input
                         type="text"
                         placeholder="Playlist name"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="flex-1 min-w-[150px] border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 min-w-[150px] border border-olive/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                     <input
                         type="text"
                         placeholder="Description"
                         value={form.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
-                        className="flex-1 min-w-[150px] border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 min-w-[150px] border border-olive/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                     <button
                         type="submit"
                         disabled={creating}
-                        className="bg-blue-600 text-white rounded px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                        className="bg-linear-to-r from-terracotta to-plum text-white rounded-lg px-4 py-2 text-sm font-medium shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0"
                     >
                         {creating ? "Creating..." : "Create"}
                     </button>
@@ -146,24 +146,24 @@ const Playlists = () => {
                 )}
 
                 {loading ? (
-                    <p className="text-center text-gray-500 py-8">Loading playlists...</p>
+                    <p className="text-center text-cream/70 py-8">Loading playlists...</p>
                 ) : playlists.length === 0 ? (
-                    <p className="text-center text-gray-500 py-8">No playlists yet</p>
+                    <p className="text-center text-cream/70 py-8">No playlists yet</p>
                 ) : (
                     <ul className="space-y-3">
                         {playlists.map((playlist) => (
-                            <li key={playlist._id} className="bg-white rounded-lg shadow">
+                            <li key={playlist._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                                 <button
                                     onClick={() => openPlaylist(playlist._id)}
                                     className="w-full text-left px-4 py-3 flex items-center justify-between gap-3"
                                 >
                                     <div className="min-w-0">
-                                        <p className="font-medium truncate">{playlist.name}</p>
-                                        <p className="text-xs text-gray-500 truncate">
+                                        <p className="font-medium text-navy truncate">{playlist.name}</p>
+                                        <p className="text-xs text-olive truncate">
                                             {playlist.description}
                                         </p>
                                     </div>
-                                    <span className="text-sm text-gray-400 shrink-0">
+                                    <span className="text-sm text-terracotta font-medium shrink-0">
                                         {expandedId === playlist._id ? "Hide" : "Manage"}
                                     </span>
                                 </button>
@@ -191,11 +191,11 @@ const Playlists = () => {
                                                         onChange={(e) =>
                                                             setVideoIdInput(e.target.value)
                                                         }
-                                                        className="flex-1 border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="flex-1 border border-olive/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                                                     />
                                                     <button
                                                         type="submit"
-                                                        className="bg-blue-600 text-white rounded px-4 py-2 text-sm font-medium hover:bg-blue-700"
+                                                        className="bg-linear-to-r from-terracotta to-plum text-white rounded-lg px-4 py-2 text-sm font-medium shadow-md hover:shadow-lg transition-all"
                                                     >
                                                         Add
                                                     </button>

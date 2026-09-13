@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { registerUser, loginUser } from "../api/userService"
 import { useAuth } from "../context/AuthContext.jsx"
+import Logo from "../components/Logo.jsx"
 
 const Register = () => {
     const { login } = useAuth()
@@ -57,12 +58,21 @@ const Register = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-gray-50 py-8">
+        <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-linear-to-br from-navy via-plum to-terracotta py-8 px-4">
+            <div className="p-3 rounded-2xl bg-cream/10 shadow-2xl shadow-terracotta/50">
+                <Logo className="h-16 w-16" />
+            </div>
+
             <form
                 onSubmit={handleSubmit}
-                className="w-full max-w-sm bg-white p-8 rounded-lg shadow space-y-4"
+                className="w-full max-w-sm bg-white/95 backdrop-blur p-8 rounded-2xl shadow-2xl space-y-4"
             >
-                <h1 className="text-2xl font-semibold text-center">Register</h1>
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold bg-linear-to-r from-navy to-terracotta bg-clip-text text-transparent">
+                        Create your account
+                    </h1>
+                    <p className="text-sm text-olive mt-1">Join and start sharing</p>
+                </div>
 
                 {error && (
                     <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
@@ -78,7 +88,7 @@ const Register = () => {
                         value={form.fullName}
                         onChange={handleChange}
                         required
-                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-olive/30 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                 </div>
 
@@ -90,7 +100,7 @@ const Register = () => {
                         value={form.userName}
                         onChange={handleChange}
                         required
-                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-olive/30 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                 </div>
 
@@ -102,7 +112,7 @@ const Register = () => {
                         value={form.email}
                         onChange={handleChange}
                         required
-                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-olive/30 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                 </div>
 
@@ -114,7 +124,7 @@ const Register = () => {
                         value={form.password}
                         onChange={handleChange}
                         required
-                        className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-olive/30 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-terracotta transition-shadow"
                     />
                 </div>
 
@@ -125,7 +135,7 @@ const Register = () => {
                         accept="image/*"
                         onChange={(e) => setAvatar(e.target.files?.[0] || null)}
                         required
-                        className="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-600 file:text-white file:font-medium file:cursor-pointer hover:file:bg-blue-700"
+                        className="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-terracotta file:text-white file:font-medium file:cursor-pointer hover:file:bg-plum"
                     />
                     {avatar && (
                         <p className="mt-1 text-xs text-gray-500">{avatar.name}</p>
@@ -140,7 +150,7 @@ const Register = () => {
                         type="file"
                         accept="image/*"
                         onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
-                        className="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-600 file:text-white file:font-medium file:cursor-pointer hover:file:bg-blue-700"
+                        className="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-terracotta file:text-white file:font-medium file:cursor-pointer hover:file:bg-plum"
                     />
                     {coverImage && (
                         <p className="mt-1 text-xs text-gray-500">{coverImage.name}</p>
@@ -150,15 +160,15 @@ const Register = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 text-white rounded py-2 font-medium hover:bg-blue-700 disabled:opacity-50"
+                    className="w-full bg-linear-to-r from-terracotta to-plum text-white rounded-lg py-2.5 font-medium shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>
 
-            <p className="text-center text-sm">
+            <p className="text-center text-sm text-cream">
                 Already have an account?{" "}
-                <Link to="/login" className="text-blue-600 hover:underline">
+                <Link to="/login" className="font-medium text-white hover:underline">
                     Login
                 </Link>
             </p>

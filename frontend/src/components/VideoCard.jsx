@@ -12,15 +12,16 @@ const VideoCard = ({ video }) => {
     return (
         <Link
             to={`/watch/${video._id}`}
-            className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden"
+            className="group block bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 overflow-hidden"
         >
-            <div className="relative aspect-video bg-gray-200">
+            <div className="relative aspect-video bg-gray-200 overflow-hidden">
                 <img
                     src={video.thumbnail}
                     alt={video.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1.5 py-0.5 rounded">
+                <div className="absolute inset-0 bg-linear-to-t from-navy/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="absolute bottom-1 right-1 bg-navy/90 text-cream text-xs px-1.5 py-0.5 rounded">
                     {formatDuration(video.duration)}
                 </span>
             </div>
@@ -29,13 +30,15 @@ const VideoCard = ({ video }) => {
                     <img
                         src={video.owner.avatar}
                         alt={video.owner.userName}
-                        className="w-9 h-9 rounded-full object-cover shrink-0"
+                        className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-cream"
                     />
                 )}
                 <div className="min-w-0">
-                    <h3 className="text-sm font-medium line-clamp-2">{video.title}</h3>
-                    <p className="text-xs text-gray-500 mt-1">{video.owner?.userName}</p>
-                    <p className="text-xs text-gray-500">{video.views ?? 0} views</p>
+                    <h3 className="text-sm font-medium text-navy line-clamp-2 group-hover:text-terracotta transition-colors">
+                        {video.title}
+                    </h3>
+                    <p className="text-xs text-olive mt-1">{video.owner?.userName}</p>
+                    <p className="text-xs text-olive">{video.views ?? 0} views</p>
                 </div>
             </div>
         </Link>
