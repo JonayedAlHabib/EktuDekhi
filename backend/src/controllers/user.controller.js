@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/apiError.js"
 import {User} from "../models/user.model.js"
@@ -167,17 +168,17 @@ const refreshAccessToken = asyncHandler (async (req, res) =>{
             secure: true
         }
     
-        const {accessToken, newRefreshToken} = generateAccessTokenAndRefreshToken(user._id)
-    
+        const {accessToken, refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+
         return res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", newRefreshToken, options)
+        .cookie("refreshToken", refreshToken, options)
         .json(
             new ApiResponse(
                 200,
                 {
-                    accessToken, refreshToken: newRefreshToken,
+                    accessToken, refreshToken,
                 },
                 "Access token refreshed"
             )
@@ -232,7 +233,7 @@ const updateAccountDetails = asyncHandler (async (req, res) =>{
             }
         },
         {new : true}
-    ).select("-password")
+    ).select("-password -refreshToken")
 
     return res
     .status(200)
@@ -245,12 +246,12 @@ const updateUserAvatar = asyncHandler (async (req, res) =>{
     if(!avatarLocal)
         throw new ApiError(400, "Avatar file missing")
 
-    const avatar = uploadOnCloudinary(avatarLocal)
+    const avatar = await uploadOnCloudinary(avatarLocal)
 
-    if(!avatar.url)
+    if(!avatar?.url)
         throw new ApiError(400, "Error while file uploading")
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set:{
@@ -258,7 +259,7 @@ const updateUserAvatar = asyncHandler (async (req, res) =>{
             }
         },
         {new: true}
-    ).select("-password")
+    ).select("-password -refreshToken")
 
     return res
     .status(200)
@@ -271,12 +272,12 @@ const updateUserCoverImage = asyncHandler (async (req, res) =>{
     if(!coverImageLocal)
         throw new ApiError(400, "Cover Image field missing")
 
-    const coverImage = uploadOnCloudinary(coverImageLocal)
+    const coverImage = await uploadOnCloudinary(coverImageLocal)
 
-    if(!coverImage.url)
+    if(!coverImage?.url)
         throw new ApiError(400, "Error while file uploading")
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -284,7 +285,7 @@ const updateUserCoverImage = asyncHandler (async (req, res) =>{
             }
         },
         {new: true}
-    ).select("-password")
+    ).select("-password -refreshToken")
 
     return res
     .status(200)
