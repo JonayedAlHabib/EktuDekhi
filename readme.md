@@ -8,9 +8,8 @@ A video hosting website backend, similar to YouTube. Built with Node.js, Express
 - **Users** — update account details, change password, get channel profile (with subscriber counts), watch history
 - **Videos** — upload video + thumbnail (via Cloudinary), list/paginate, update, delete, toggle publish status
 - **Comments** — add, update, delete, paginated fetch per video
-- **Likes** — toggle like on videos, comments, and tweets; fetch all liked videos
+- **Likes** — toggle like on videos and comments; fetch all liked videos
 - **Subscriptions** — subscribe/unsubscribe to channels, fetch a channel's subscribers, fetch channels a user is subscribed to
-- **Tweets** — create, update, delete tweets, fetch a user's tweets (paginated)
 - **Playlists** — create playlists, fetch a user's playlists (paginated), fetch a playlist with its videos, add/remove videos, delete a playlist
 - **Dashboard** — channel stats (total videos, views, subscribers, likes) and a paginated list of the logged-in creator's own videos (including unpublished)
 
@@ -29,7 +28,7 @@ A video hosting website backend, similar to YouTube. Built with Node.js, Express
 src/
 ├── controllers/     # request handlers (business logic)
 ├── routes/          # Express routers, mounted under /api/v1
-├── models/          # Mongoose schemas (user, video, comment, like, subscription, tweet, playlist)
+├── models/          # Mongoose schemas (user, video, comment, like, subscription, playlist)
 ├── middlewares/      # auth (JWT) and multer (file upload) middleware
 ├── utils/            # ApiError, ApiResponse, asyncHandler, cloudinary helper
 ├── db/                # MongoDB connection
@@ -120,7 +119,6 @@ All routes are prefixed with `/api/v1`. Routes marked 🔒 require a valid JWT (
 |---|---|---|
 | POST | `/toggle/v/:videoId` | Toggle like on a video |
 | POST | `/toggle/c/:commentId` | Toggle like on a comment |
-| POST | `/toggle/t/:tweetId` | Toggle like on a tweet |
 | GET | `/videos` | Get all videos liked by the current user |
 
 ### Subscriptions — `/subscriptions` 🔒 (all routes)
@@ -129,14 +127,6 @@ All routes are prefixed with `/api/v1`. Routes marked 🔒 require a valid JWT (
 | POST | `/c/:channelId` | Subscribe/unsubscribe to a channel |
 | GET | `/c/:channelId` | Get a channel's subscribers |
 | GET | `/u/:subscriberId` | Get channels a user is subscribed to |
-
-### Tweets — `/tweets` 🔒 (all routes)
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/` | Create a tweet |
-| GET | `/user/:userId` | Get paginated tweets for a user |
-| PATCH | `/:tweetId` | Update a tweet |
-| DELETE | `/:tweetId` | Delete a tweet |
 
 ### Playlists — `/playlists` 🔒 (all routes)
 | Method | Endpoint | Description |

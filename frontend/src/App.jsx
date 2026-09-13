@@ -7,7 +7,6 @@ import Upload from './pages/Upload.jsx'
 import Channel from './pages/Channel.jsx'
 import Playlists from './pages/Playlists.jsx'
 import Dashboard from './pages/Dashboard.jsx'
-import Tweets from './pages/Tweets.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 const App = () => {
@@ -58,14 +57,6 @@ const App = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/tweets"
-        element={
-          <ProtectedRoute>
-            <Tweets />
           </ProtectedRoute>
         }
       />

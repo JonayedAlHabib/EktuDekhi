@@ -16,9 +16,6 @@ const Navbar = () => {
                 <Link to="/playlists" className="text-sm text-gray-600 hover:text-gray-900">
                     Playlists
                 </Link>
-                <Link to="/tweets" className="text-sm text-gray-600 hover:text-gray-900">
-                    Tweets
-                </Link>
                 <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
                     Dashboard
                 </Link>

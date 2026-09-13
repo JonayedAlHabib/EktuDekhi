@@ -6,8 +6,5 @@ export const toggleVideoLike = (videoId) =>
 export const toggleCommentLike = (commentId) =>
     axiosInstance.post(`/likes/toggle/c/${commentId}`).then((res) => res.data)
 
-export const toggleTweetLike = (tweetId) =>
-    axiosInstance.post(`/likes/toggle/t/${tweetId}`).then((res) => res.data)
-
 export const getAllLikedVideos = () =>
     axiosInstance.get("/likes/videos").then((res) => res.data)
