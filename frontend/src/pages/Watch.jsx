@@ -63,6 +63,8 @@ const Watch = () => {
                 ...prev,
                 likesCount: prev.likesCount + (res.data.liked ? 1 : -1)
             }))
+        } catch {
+            // ignore — button just won't toggle if the call fails
         } finally {
             setLikeLoading(false)
         }
@@ -76,6 +78,8 @@ const Watch = () => {
                 isSubscribed: res.data.subscribed,
                 subscribersCount: prev.subscribersCount + (res.data.subscribed ? 1 : -1)
             }))
+        } catch {
+            // ignore — button just won't toggle if the call fails
         } finally {
             setSubLoading(false)
         }
