@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import {Video} from "../models/video.model.js"
+import { Like } from "../models/like.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
@@ -100,22 +101,32 @@ const getVideoById = asyncHandler (async (req, res) =>{
     if(!(video.isPublished))
         throw new ApiError(404, "Video not available")
 
-    await Video.findByIdAndUpdate(
-        videoId,
-        { $inc: {views: 1} },
-        {returnDocument: 'after'}
+    // Only count a view the first time this user watches this video - repeat visits
+    // (refreshes, rewatching later) must not keep incrementing the counter.
+    // findOneAndUpdate's $ne condition + $push happens as one atomic operation, so two
+    // concurrent requests from the same user can't both "win" and double-count a view.
+    const firstWatch = await User.findOneAndUpdate(
+        { _id: req.user._id, watchHistory: { $ne: video._id } },
+        { $push: { watchHistory: video._id } }
     )
 
-    const updatedVideo = await Video.findById(videoId)
-        .populate('owner', 'userName avatar fullName')
+    if(firstWatch) {
+        await Video.findByIdAndUpdate(video._id, { $inc: {views: 1} })
+        video.views += 1
+    }
+
+    const likesCount = await Like.countDocuments({ video: video._id })
 
     return res
     .status(200)
+    .set("Cache-Control", "no-store")
     .json(
-        new ApiResponse(200, updatedVideo, "Video fetched successfully")
+        new ApiResponse(
+            200,
+            { ...video.toObject(), likesCount },
+            "Video fetched successfully"
+        )
     )
-
-
 })
 
 const updateVideo = asyncHandler (async (req, res) =>{
