@@ -198,7 +198,7 @@ const changePassword = asyncHandler (async (req, res) =>{
         throw new ApiError(400, "Invalid Old Password")
 
     user.password = newPassword
-    await user.save({validationBeforeSave: false})
+    await user.save({validateBeforeSave: false})
 
     return res
     .status(200)
@@ -388,7 +388,7 @@ const getWatchHistory = asyncHandler(async(req, res) => {
                                 {
                                     $project: {
                                         fullName: 1,
-                                        username: 1,
+                                        userName: 1,
                                         avatar: 1
                                     }
                                 }
