@@ -15,14 +15,14 @@ const Watch = () => {
     const [liked, setLiked] = useState(false)
     const [likeLoading, setLikeLoading] = useState(false)
 
-    // Skip the fetch when a VideoCard already handed us the video via router state;
-    // otherwise (direct URL visit / refresh) fetch it by id.
+    // Always fetch by id — GET /videos/:videoId is also what registers the view
+    // server-side, so this must run even when a VideoCard already passed the video
+    // via router state. Only show the full-page loading state when we don't already
+    // have something to display (avoids a loading flash on the common click-through path).
     useEffect(() => {
-        if (video) return
         let cancelled = false
 
         const fetchVideo = async () => {
-            setLoadingVideo(true)
             setVideoError("")
             try {
                 const res = await getVideoById(videoId)
@@ -40,7 +40,7 @@ const Watch = () => {
         return () => {
             cancelled = true
         }
-    }, [video, videoId])
+    }, [videoId])
 
     // Determine initial like state from the current user's liked-videos list.
     useEffect(() => {
