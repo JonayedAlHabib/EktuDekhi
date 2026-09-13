@@ -12,7 +12,6 @@ const VideoCard = ({ video }) => {
     return (
         <Link
             to={`/watch/${video._id}`}
-            state={{ video }}
             className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden"
         >
             <div className="relative aspect-video bg-gray-200">
