@@ -135,7 +135,7 @@ const updateVideo = asyncHandler (async (req, res) =>{
     if(!video)
         throw new ApiError(404, "Video not found")
 
-    if(video.owner.toString() !== req.user?._id.toString())
+    if(video.owner._id.toString() !== req.user?._id.toString())
         throw new ApiError(403, "You are not authorized to update this video")
 
     const updateFields = {}
@@ -176,7 +176,7 @@ const deleteVideo = asyncHandler (async (req, res) =>{
     if(!video)
         throw new ApiError(404, "Video not found")
 
-    if(video.owner.toString() !== req.user?._id.toString())
+    if(video.owner._id.toString() !== req.user?._id.toString())
         throw new ApiError(403, "You are not authorized to delete this video")
 
     const deletedVideo = await Video.findByIdAndDelete(videoId)
@@ -198,16 +198,16 @@ const togglePublishStatus = asyncHandler (async (req, res) =>{
     if(!(mongoose.Types.ObjectId.isValid(videoId)))
         throw new ApiError(400, "Invalid video ID")
 
-    const video = await Video.findByID(videoId)
+    const video = await Video.findById(videoId)
         .populate('owner', 'userName avatar fullName')
 
     if(!video)
         throw new ApiError(404, "Video not found")
 
-    if(video.owner.toString() !== req.user?._id.toString())
+    if(video.owner._id.toString() !== req.user?._id.toString())
         throw new ApiError(403, "You are not authorized to delete this video")
 
-    const user = Video.findByIdAndUpdate(
+    const user = await Video.findByIdAndUpdate(
         videoId,
         {
             $set: {isPublished: !video.isPublished}
